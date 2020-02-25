@@ -24,7 +24,7 @@ func (s Sudoku) ValidNums(x, y int) []int {
 	// cols := []int{}
 	// rows := []int{}
 	// sqr := []int{}
-	nums := [9]bool{}
+	nums := [10]bool{}
 
 	// cols
 	for i := 0; i < len(s); i++ {
