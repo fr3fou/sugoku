@@ -21,12 +21,15 @@ func (s Sudoku) Print() {
 
 // ValidNums returns the valid nums
 func (s Sudoku) ValidNums(x, y int) []int {
-	cols := []int{}
-	rows := []int{}
-	sqr := []int{}
+	// cols := []int{}
+	// rows := []int{}
+	// sqr := []int{}
+	nums := [9]bool{}
 
+	// cols
 	for i := 0; i < len(s); i++ {
-
+		val := s[i][x]
+		nums[val] = val == 0
 	}
 
 	return
