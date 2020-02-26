@@ -17,5 +17,5 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	spew.Dump(s.ValidNums(8, 8))
+	spew.Dump(s.Solve())
 }

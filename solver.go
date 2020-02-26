@@ -2,17 +2,20 @@ package main
 
 import "fmt"
 
+import "strings"
+
 // Sudoku ...
 type Sudoku [9][9]int
 
 // Print prints the sudoku
-func (s Sudoku) Print() {
+func (s Sudoku) String() string {
+	var b strings.Builder
 	for _, line := range s {
 		for _, num := range line {
 			if num == 0 {
-				fmt.Print("- ")
+				fmt.Sprint("- ")
 			} else {
-				fmt.Printf("%d ", num)
+				fmt.Fprintf(b, "%d ", num)
 			}
 		}
 		fmt.Println()
@@ -21,9 +24,6 @@ func (s Sudoku) Print() {
 
 // ValidNums returns the valid nums
 func (s Sudoku) ValidNums(x, y int) []int {
-	// cols := []int{}
-	// rows := []int{}
-	// sqr := []int{}
 	digits := [10]bool{}
 
 	// cols
