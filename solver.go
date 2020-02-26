@@ -75,7 +75,17 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 // Solve ...
 func (s Sudoku) Solve() Sudoku {
-	return s.solve(0, 0)
+	for i := 0; i < 9; i++ {
+		for j := 0; j < 9; j++ {
+			if s[i][j] != 0 {
+				continue
+			}
+
+			s = s.solve(i, j)
+		}
+	}
+
+	return s
 }
 
 func (s Sudoku) solve(x, y int) Sudoku {
@@ -85,29 +95,6 @@ func (s Sudoku) solve(x, y int) Sudoku {
 	if len(nums) == 0 {
 		s[x][y] = -1
 		return s
-	}
-
-	og := s[x][y]
-
-outer:
-	for _, num := range nums {
-		// assume it's the current number
-		s[x][y] = num
-		for i := x; i < 9; i++ {
-			for j := y + 1; j < 9; j++ {
-				// we don't care
-				if s[i][j] != 0 {
-					continue
-				}
-
-				if s.solve(i, j)[i][j] == -1 {
-					// we fucked up
-					// we gotta clean up
-					s[i][j] = og
-					continue outer
-				}
-			}
-		}
 	}
 
 	return s
