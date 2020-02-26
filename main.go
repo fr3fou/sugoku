@@ -1,6 +1,6 @@
 package main
 
-import "github.com/davecgh/go-spew/spew"
+import "fmt"
 
 func main() {
 	s := Sudoku{
@@ -17,5 +17,5 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	spew.Dump(s.Solve())
+	fmt.Println(s.ValidNums(6, 4))
 }

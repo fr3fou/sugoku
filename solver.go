@@ -1,8 +1,9 @@
 package main
 
-import "fmt"
-
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // Sudoku ...
 type Sudoku [9][9]int
@@ -28,32 +29,31 @@ func (s Sudoku) String() string {
 func (s Sudoku) ValidNums(x, y int) []int {
 	digits := [10]bool{}
 
-	// cols
 	for i := 0; i < 9; i++ {
-		val := s[i][x]         // will be 1..9
+		val := s[y][i] // will be 1..9
+		fmt.Println(val, " at ", y, i)
 		digits[val] = val != 0 // if it's 0, it's valid
 	}
 
-	// rows
-	for i := 0; i < 9; i++ {
-		val := s[x][i]         // will be 1..9
-		digits[val] = val != 0 // if it's 0, it's valid
-	}
+	// for i := 0; i < 9; i++ {
+	// 	val := s[i][x]         // will be 1..9
+	// 	digits[val] = val != 0 // if it's 0, it's valid
+	// }
 
-	// square
-	topX := x / 3 * 3
-	topY := y / 3 * 3
+	// // square
+	// topX := x / 3 * 3
+	// topY := y / 3 * 3
 
-	for i := topX; i < topX+3; i++ {
-		for j := topY; j < topY+3; j++ {
-			val := s[i][j]         // will be 1..9
-			digits[val] = val != 0 // if it's 0, it's valid
-		}
-	}
+	// for i := topX; i < topX+3; i++ {
+	// 	for j := topY; j < topY+3; j++ {
+	// 		val := s[i][j]         // will be 1..9
+	// 		digits[val] = val != 0 // if it's 0, it's valid
+	// 	}
+	// }
 
 	nums := []int{}
 	for i := 1; i < len(digits); i++ {
-		if !digits[i] {
+		if digits[i] {
 			nums = append(nums, i)
 		}
 	}
