@@ -28,8 +28,20 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 	// cols
 	for i := 0; i < len(s); i++ {
-		val := s[i][x]
-		digits[val] = val == 0
+		val := s[i][x]         // will be 1..9
+		digits[val] = val == 0 // if it's 0, it's valid
+	}
+
+	// rows
+	for i := 0; i < len(s); i++ {
+		val := s[x][i]         // will be 1..9
+		digits[val] = val == 0 // if it's 0, it's valid
+	}
+
+	// square
+	for i := 0; i < len(s); i++ {
+		val := s[x][i]         // will be 1..9
+		digits[val] = val == 0 // if it's 0, it's valid
 	}
 
 	nums := []int{}
