@@ -56,10 +56,6 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 // Solve ...
 func (s Sudoku) Solve() Sudoku {
-	if len(s) != len(s[0]) {
-		panic("must be square")
-	}
-
 	for x := 0; x < len(s); x++ {
 		for y := 0; y < len(s); y++ {
 			// we don't care
