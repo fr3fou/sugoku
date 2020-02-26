@@ -24,15 +24,22 @@ func (s Sudoku) ValidNums(x, y int) []int {
 	// cols := []int{}
 	// rows := []int{}
 	// sqr := []int{}
-	nums := [10]bool{}
+	digits := [10]bool{}
 
 	// cols
 	for i := 0; i < len(s); i++ {
 		val := s[i][x]
-		nums[val] = val == 0
+		digits[val] = val == 0
 	}
 
-	return
+	nums := []int{}
+	for i, val := range digits {
+		if val {
+			nums = append(nums, i+1)
+		}
+	}
+
+	return nums
 }
 
 // Solve ...
@@ -79,7 +86,7 @@ outer:
 				guess := s.solve(i, j)
 				if guess == -1 {
 					// we fucked up
-					goto outer
+					continue outer
 				}
 			}
 		}
