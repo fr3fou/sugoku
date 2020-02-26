@@ -1,4 +1,4 @@
-# sudogo
+# sugoku
 
 Simple sudoku solver.
 
