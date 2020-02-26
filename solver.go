@@ -20,7 +20,7 @@ func (s Sudoku) String() string {
 				fmt.Fprint(b, "|")
 			}
 			if num == 0 {
-				fmt.Fprint(b, " - ")
+				fmt.Fprint(b, " . ")
 			} else {
 				fmt.Fprintf(b, " %d ", num)
 			}
