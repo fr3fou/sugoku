@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 // Sudoku ...
-type Sudoku [][]int
+type Sudoku [9][9]int
 
 // Print prints the sudoku
 func (s Sudoku) Print() {
