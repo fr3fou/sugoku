@@ -1,5 +1,7 @@
 package main
 
+import "github.com/davecgh/go-spew/spew"
+
 func main() {
 	s := Sudoku{
 		{0, 0, 8 /**/, 0, 0, 2 /**/, 0, 5, 0},
@@ -15,5 +17,5 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	s.Print()
+	spew.Dump(s.ValidNums(8, 8))
 }

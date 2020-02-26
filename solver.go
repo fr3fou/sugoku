@@ -27,27 +27,32 @@ func (s Sudoku) ValidNums(x, y int) []int {
 	digits := [10]bool{}
 
 	// cols
-	for i := 0; i < len(s); i++ {
+	for i := 0; i < 9; i++ {
 		val := s[i][x]         // will be 1..9
-		digits[val] = val == 0 // if it's 0, it's valid
+		digits[val] = val != 0 // if it's 0, it's valid
 	}
 
 	// rows
-	for i := 0; i < len(s); i++ {
+	for i := 0; i < 9; i++ {
 		val := s[x][i]         // will be 1..9
-		digits[val] = val == 0 // if it's 0, it's valid
+		digits[val] = val != 0 // if it's 0, it's valid
 	}
 
 	// square
-	for i := 0; i < len(s); i++ {
-		val := s[x][i]         // will be 1..9
-		digits[val] = val == 0 // if it's 0, it's valid
+	topX := x / 3 * 3
+	topY := y / 3 * 3
+
+	for i := topX; i < topX+3; i++ {
+		for j := topY; j < topY+3; j++ {
+			val := s[i][j]         // will be 1..9
+			digits[val] = val != 0 // if it's 0, it's valid
+		}
 	}
 
 	nums := []int{}
-	for i, val := range digits {
-		if val {
-			nums = append(nums, i+1)
+	for i := 1; i < len(digits); i++ {
+		if !digits[i] {
+			nums = append(nums, i)
 		}
 	}
 
@@ -56,8 +61,8 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 // Solve ...
 func (s Sudoku) Solve() Sudoku {
-	for x := 0; x < len(s); x++ {
-		for y := 0; y < len(s); y++ {
+	for x := 0; x < 9; x++ {
+		for y := 0; y < 9; y++ {
 			// we don't care
 			if s[x][y] != 0 {
 				continue
@@ -80,12 +85,13 @@ func (s Sudoku) solve(x, y int) int {
 	}
 
 	num := -1
+
 outer:
 	for _, num = range nums {
 		// assume it's the current number
 		s[x][y] = num
-		for i := x; i < len(s); i++ {
-			for j := y + 1; j < len(s); j++ {
+		for i := x; i < 9; i++ {
+			for j := y + 1; j < 9; j++ {
 				// we don't care
 				if s[i][j] != 0 {
 					continue
