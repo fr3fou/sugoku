@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Sudoku ...
+// Sudoku is a representation of a sudoku board
 type Sudoku [9][9]int
 
 // Print prints the sudoku
@@ -73,35 +73,38 @@ func (s Sudoku) ValidNums(x, y int) []int {
 	return nums
 }
 
-// Solve ...
+// Solve solves the sudoku
 func (s Sudoku) Solve() Sudoku {
 	return *s.solve(0, 0)
 }
 
 func (s Sudoku) solve(x, y int) *Sudoku {
 	nums := s.ValidNums(x, y)
+
+	// base case (bottom right corner)
 	if x == 8 && y == 8 && len(nums) == 1 {
-		s[x][y] = nums[0]
-		return &s
+		s[x][y] = nums[0] // write the last num
+		return &s         // success!
 	}
 
-	for _, num := range s.ValidNums(x, y) {
-		s[x][y] = num
-		n := s.solve(s.next(x, y))
+	for _, num := range nums {
+		s[x][y] = num // assume it's the correct one
+
+		n := s.solve(s.next(x, y)) // recur
 		if n != nil {
-			return n
+			return n // return if not nil (has reached the base case)
 		}
 	}
 
-	return nil
+	return nil // we failed
 }
 
 // next finds the next number that is a available
 func (s Sudoku) next(x, y int) (int, int) {
 	for s[x][y] != 0 {
 		y++
-		if y > 8 {
-			y = 0
+		if y > 8 { // if we have reached the end of the row
+			y = 0 // go to the next row
 			x++
 		}
 	}
