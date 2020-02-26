@@ -75,22 +75,36 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 // Solve ...
 func (s Sudoku) Solve() Sudoku {
-	for i := 0; i < 9; i++ {
-		for j := 0; j < 9; j++ {
-			if s[i][j] != 0 {
-				continue
-			}
+	return *s.solve(0, 0)
+}
 
-			for _, num := range s.ValidNums(x, y) {
-				s = s.solve(i, j, num)
-			}
+func (s Sudoku) solve(x, y int) *Sudoku {
+	nums := s.ValidNums(x, y)
+	if x == 8 && y == 8 && len(nums) == 1 {
+		s[x][y] = nums[0]
+		return &s
+	}
+
+	for _, num := range s.ValidNums(x, y) {
+		s[x][y] = num
+		n := s.solve(s.next(x, y))
+		if n != nil {
+			return n
 		}
 	}
 
-	return s
+	return nil
 }
 
-func (s Sudoku) solve(x, y, num int) Sudoku {
-	s[x][y] = num // assume
+// next finds the next number that is a available
+func (s Sudoku) next(x, y int) (int, int) {
+	for s[x][y] != 0 {
+		y++
+		if y > 8 {
+			y = 0
+			x++
+		}
+	}
 
+	return x, y
 }
