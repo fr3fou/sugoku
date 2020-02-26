@@ -29,6 +29,7 @@ func (s Sudoku) String() string {
 func (s Sudoku) ValidNums(x, y int) []int {
 	digits := [10]bool{}
 
+	// check horizontal
 	for i := 0; i < 9; i++ {
 		val := s[i][y]         // will be 1..9
 		digits[val] = val != 0 // if it's 0, it's valid
@@ -62,33 +63,22 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 // Solve ...
 func (s Sudoku) Solve() Sudoku {
-	for x := 0; x < 9; x++ {
-		for y := 0; y < 9; y++ {
-			// we don't care
-			if s[x][y] != 0 {
-				continue
-			}
-
-			num := s.solve(x, y)
-			s[x][y] = num
-		}
-	}
-
-	return s
+	return s.solve(0, 0)
 }
 
-func (s Sudoku) solve(x, y int) int {
+func (s Sudoku) solve(x, y int) Sudoku {
 	nums := s.ValidNums(x, y)
 
 	// no valid nums
 	if len(nums) == 0 {
-		return -1
+		s[x][y] = -1
+		return s
 	}
 
-	num := -1
+	og := s[x][y]
 
 outer:
-	for _, num = range nums {
+	for _, num := range nums {
 		// assume it's the current number
 		s[x][y] = num
 		for i := x; i < 9; i++ {
@@ -98,14 +88,15 @@ outer:
 					continue
 				}
 
-				guess := s.solve(i, j)
-				if guess == -1 {
+				if s.solve(i, j)[i][j] == -1 {
 					// we fucked up
+					// we gotta clean up
+					s[i][j] = og
 					continue outer
 				}
 			}
 		}
 	}
 
-	return num
+	return s
 }
