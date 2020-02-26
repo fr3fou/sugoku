@@ -17,5 +17,5 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	fmt.Println(s.ValidNums(6, 4))
+	fmt.Println(s.Solve())
 }
