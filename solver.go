@@ -81,21 +81,16 @@ func (s Sudoku) Solve() Sudoku {
 				continue
 			}
 
-			s = s.solve(i, j)
+			for _, num := range s.ValidNums(x, y) {
+				s = s.solve(i, j, num)
+			}
 		}
 	}
 
 	return s
 }
 
-func (s Sudoku) solve(x, y int) Sudoku {
-	nums := s.ValidNums(x, y)
+func (s Sudoku) solve(x, y, num int) Sudoku {
+	s[x][y] = num // assume
 
-	// no valid nums
-	if len(nums) == 0 {
-		s[x][y] = -1
-		return s
-	}
-
-	return s
 }
