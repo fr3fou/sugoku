@@ -75,8 +75,9 @@ func (s *SolverDefault) ValidNums(x, y int) []int {
 }
 
 // Solve solves the sudoku
-func (s *SolverDefault) Solve() Sudoku {
-	return *s.solve(0, 0)
+func (s *SolverDefault) Solve() *SolverDefault {
+	s.solve(0, 0)
+	return s
 }
 
 func (s *SolverDefault) solve(x, y int) *Sudoku {
