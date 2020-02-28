@@ -1,17 +1,18 @@
-package main
+package sudoku
 
 import (
 	"fmt"
 	"strings"
 )
 
-// Sudoku is a representation of a sudoku board
-type Sudoku [9][9]int
+type SolverDefault struct {
+	Board *Sudoku
+}
 
 // Print prints the sudoku
-func (s Sudoku) String() string {
+func (s *SolverDefault) String() string {
 	b := &strings.Builder{}
-	for i, line := range s {
+	for i, line := range s.Board {
 		if i%3 == 0 {
 			fmt.Fprintln(b, "+---------+---------+---------+")
 		}
@@ -38,17 +39,17 @@ func (s Sudoku) String() string {
 }
 
 // ValidNums returns the valid nums
-func (s Sudoku) ValidNums(x, y int) []int {
+func (s *SolverDefault) ValidNums(x, y int) []int {
 	digits := [10]bool{}
 
 	// check horizontal
 	for i := 0; i < 9; i++ {
-		val := s[i][y]         // will be 1..9
+		val := s.Board[i][y]   // will be 1..9
 		digits[val] = val != 0 // if it's 0, it's valid
 	}
 
 	for i := 0; i < 9; i++ {
-		val := s[x][i]         // will be 1..9
+		val := s.Board[x][i]   // will be 1..9
 		digits[val] = val != 0 // if it's 0, it's valid
 	}
 
@@ -58,7 +59,7 @@ func (s Sudoku) ValidNums(x, y int) []int {
 
 	for i := topX; i < topX+3; i++ {
 		for j := topY; j < topY+3; j++ {
-			val := s[i][j]         // will be 1..9
+			val := s.Board[i][j]   // will be 1..9
 			digits[val] = val != 0 // if it's 0, it's valid
 		}
 	}
@@ -74,34 +75,35 @@ func (s Sudoku) ValidNums(x, y int) []int {
 }
 
 // Solve solves the sudoku
-func (s Sudoku) Solve() Sudoku {
+func (s *SolverDefault) Solve() Sudoku {
 	return *s.solve(0, 0)
 }
 
-func (s Sudoku) solve(x, y int) *Sudoku {
+func (s *SolverDefault) solve(x, y int) *Sudoku {
 	nums := s.ValidNums(x, y)
 
 	// base case (bottom right corner)
 	if x == 8 && y == 8 && len(nums) == 1 {
-		s[x][y] = nums[0] // write the last num
-		return &s         // success!
+		s.Board[x][y] = nums[0] // write the last num
+		return s.Board          // success!
 	}
 
 	for _, num := range nums {
-		s[x][y] = num // assume it's the correct one
+		s.Board[x][y] = num // assume it's the correct one
 
 		n := s.solve(s.next(x, y)) // recur
 		if n != nil {
 			return n // return if not nil (has reached the base case)
 		}
+		s.Board[x][y] = 0 // fix it if it's not (ADDED because impl is now mutable)
 	}
 
 	return nil // we failed
 }
 
-// next finds the next number that is a available
-func (s Sudoku) next(x, y int) (int, int) {
-	for s[x][y] != 0 {
+// next finds the next number that is available
+func (s *SolverDefault) next(x, y int) (int, int) {
+	for s.Board[x][y] != 0 {
 		y++
 		if y > 8 { // if we have reached the end of the row
 			y = 0 // go to the next row

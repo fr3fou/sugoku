@@ -1,4 +1,4 @@
-package main
+package sudoku
 
 import (
 	"testing"
@@ -44,7 +44,8 @@ func TestSolver(t *testing.T) {
 	}
 	for _, tt := range testCases {
 		t.Run(tt.desc, func(t *testing.T) {
-			assert.Equal(t, tt.expected, tt.input.Solve())
+			solver := SolverDefault{&tt.input}
+			assert.Equal(t, tt.expected, solver.Solve())
 		})
 	}
 }

@@ -1,9 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	s "github.com/fr3fou/sudogo/sudoku"
+)
 
 func main() {
-	s := Sudoku{
+	board := s.Sudoku{
 		{0, 0, 8 /**/, 0, 0, 2 /**/, 0, 5, 0},
 		{0, 4, 0 /**/, 0, 0, 5 /**/, 0, 0, 8},
 		{0, 3, 5 /**/, 6, 0, 0 /**/, 2, 0, 7},
@@ -17,6 +21,6 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	fmt.Println(s)
-	fmt.Println(s.Solve())
+	solver := s.SolverDefault{&board}
+	fmt.Println(solver.Solve())
 }
