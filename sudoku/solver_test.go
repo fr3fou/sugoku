@@ -44,7 +44,7 @@ func TestSolver(t *testing.T) {
 	}
 	for _, tt := range testCases {
 		t.Run(tt.desc, func(t *testing.T) {
-			solver := SolverDefault{&tt.input}
+			solver := Solver{Board: &tt.input}
 			assert.Equal(t, tt.expected, solver.Solve())
 		})
 	}

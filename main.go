@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	s "github.com/fr3fou/sudogo/sudoku"
+	"github.com/fr3fou/sudogo/sudoku"
 )
 
 func main() {
-	board := s.Sudoku{
+	board := sudoku.Sudoku{
 		{0, 0, 8 /**/, 0, 0, 2 /**/, 0, 5, 0},
 		{0, 4, 0 /**/, 0, 0, 5 /**/, 0, 0, 8},
 		{0, 3, 5 /**/, 6, 0, 0 /**/, 2, 0, 7},
@@ -21,6 +21,19 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	solver := s.SolverDefault{&board}
-	fmt.Println(solver.Solve())
+	solver := sudoku.Solver{
+		Board: &board,
+		Cells: make(chan sudoku.Cell),
+	}
+
+	ch := make(chan sudoku.Sudoku)
+	go func() {
+		ch <- solver.Solve()
+	}()
+
+	for _ = range solver.Cells {
+		// fmt.Printf("%d at %d x %d\n", cell.Num, cell.X, cell.Y)
+	}
+
+	fmt.Println(<-ch)
 }
