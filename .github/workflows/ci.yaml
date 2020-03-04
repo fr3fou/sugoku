@@ -27,6 +27,6 @@ jobs:
           go-version: 1.13.x
       - uses: actions/checkout@v1
       - name: "Install sdl"
-        run: "apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev"
+        run: "sudo apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev"
       - name: Run tests
         run: go test -v -covermode=atomic -race ./...
