@@ -6,7 +6,7 @@ import (
 )
 
 func renderBg(r *sdl.Renderer) error {
-	err := r.SetDrawColor(0, 0, 0, 0)
+	err := r.SetDrawColor(255, 255, 255, 255)
 	if err != nil {
 		return err
 	}
@@ -20,24 +20,42 @@ func renderBg(r *sdl.Renderer) error {
 }
 
 func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
-	err := r.SetDrawColor(255, 255, 255, 255)
+	for x, line := range board {
+		for y := range line {
+			err := renderCell(r, &sudoku.Cell{Num: 0, X: x, Y: y})
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func renderCell(r *sdl.Renderer, cell *sudoku.Cell) error {
+	err := r.SetDrawColor(0, 0, 0, 0)
 	if err != nil {
 		return err
 	}
 
-	for x, line := range board {
-		for y := range line {
-			rect := sdl.Rect{
-				X: int32(x*CellSize) + 1,
-				Y: int32(y*CellSize) + 1,
-				W: CellSize - 2,
-				H: CellSize - 2,
-			}
-			err = r.FillRect(&rect)
-			if err != nil {
-				return nil
-			}
-		}
+	err = r.DrawLine(
+		int32(cell.X*CellSize),
+		int32(cell.Y*CellSize),
+		int32(cell.X*CellSize+CellSize),
+		int32(cell.Y*CellSize),
+	)
+	if err != nil {
+		return err
+	}
+
+	err = r.DrawLine(
+		int32(cell.X*CellSize),
+		int32(cell.Y*CellSize),
+		int32(cell.X*CellSize),
+		int32(cell.Y*CellSize+CellSize),
+	)
+	if err != nil {
+		return err
 	}
 
 	return nil
