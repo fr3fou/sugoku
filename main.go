@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/fr3fou/sudogo/sudoku"
 	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/ttf"
 )
 
 const (
@@ -45,18 +46,28 @@ func main() {
 		panic(err)
 	}
 
-	err = renderBg(renderer)
+	_, err = ttf.OpenFont("assets/fonts/score.ttf", 50)
 	if err != nil {
 		panic(err)
 	}
-	err = renderBoard(renderer, board)
-	if err != nil {
+
+	if err := renderBg(renderer); err != nil {
 		panic(err)
 	}
-	renderer.Present()
+
+	if err := renderBoard(renderer, board); err != nil {
+		panic(err)
+	}
+
+	if err := ttf.Init(); err != nil {
+		panic(err)
+	}
 
 	// ch := make(chan sudoku.Cell)
 	// solve(board, ch)
+
+	// render
+	renderer.Present()
 
 	running := true
 	for running {

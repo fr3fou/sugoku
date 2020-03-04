@@ -22,8 +22,7 @@ func renderBg(r *sdl.Renderer) error {
 func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
 	for x, line := range board {
 		for y := range line {
-			err := renderCell(r, &sudoku.Cell{Num: 0, X: x, Y: y})
-			if err != nil {
+			if err := renderCell(r, &sudoku.Cell{Num: 0, X: x, Y: y}); err != nil {
 				return err
 			}
 		}
@@ -33,71 +32,66 @@ func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
 }
 
 func renderCell(r *sdl.Renderer, cell *sudoku.Cell) error {
-	err := r.SetDrawColor(0, 0, 0, 0)
-	if err != nil {
+	if err := r.SetDrawColor(0, 0, 0, 0); err != nil {
 		return err
 	}
 
-	err = r.DrawLine(
+	if err := r.DrawLine(
 		int32(cell.X*CellSize),
 		int32(cell.Y*CellSize),
 		int32(cell.X*CellSize+CellSize),
 		int32(cell.Y*CellSize),
-	)
-	if err != nil {
+	); err != nil {
 		return err
 	}
 
-	err = r.DrawLine(
+	if err := r.DrawLine(
 		int32(cell.X*CellSize),
 		int32(cell.Y*CellSize),
 		int32(cell.X*CellSize),
 		int32(cell.Y*CellSize+CellSize),
-	)
-	if err != nil {
+	); err != nil {
 		return err
 	}
 
 	// horizontal edge
 	if cell.Y%3 == 0 {
-		err = r.DrawLine(
+		if err := r.DrawLine(
 			int32(cell.X*CellSize),
 			int32(cell.Y*CellSize+1),
 			int32(cell.X*CellSize+CellSize),
 			int32(cell.Y*CellSize+1),
-		)
-		if err != nil {
+		); err != nil {
 			return err
 		}
-		err = r.DrawLine(
+
+		if err := r.DrawLine(
 			int32(cell.X*CellSize),
 			int32(cell.Y*CellSize-1),
 			int32(cell.X*CellSize+CellSize),
 			int32(cell.Y*CellSize-1),
-		)
-		if err != nil {
+		); err != nil {
 			return err
 		}
 	}
 
 	// vertical edge
 	if cell.X%3 == 0 {
-		err = r.DrawLine(
+		if err := r.DrawLine(
 			int32(cell.X*CellSize+1),
 			int32(cell.Y*CellSize),
 			int32(cell.X*CellSize+1),
 			int32(cell.Y*CellSize+CellSize),
-		)
-		if err != nil {
+		); err != nil {
 			return err
 		}
-		err = r.DrawLine(
+
+		if err := r.DrawLine(
 			int32(cell.X*CellSize-1),
 			int32(cell.Y*CellSize),
 			int32(cell.X*CellSize-1),
 			int32(cell.Y*CellSize+CellSize),
-		)
-		if err != nil {
+		); err != nil {
 			return err
 		}
 	}
