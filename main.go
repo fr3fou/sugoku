@@ -9,6 +9,8 @@ const (
 	CellSize = 100
 	White    = 0xFFFFFF
 	Black    = 0x000000
+	Width    = 900
+	Height   = 900
 )
 
 func main() {
@@ -18,7 +20,7 @@ func main() {
 	defer sdl.Quit()
 
 	window, err := sdl.CreateWindow("Sudoku", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		900, 900, sdl.WINDOW_SHOWN)
+		Width, Height, sdl.WINDOW_SHOWN)
 	if err != nil {
 		panic(err)
 	}
@@ -38,25 +40,15 @@ func main() {
 		{0, 5, 0 /**/, 0, 0, 0 /**/, 6, 0, 0},
 	}
 
-	surface, err := window.GetSurface()
+	renderer, err := sdl.CreateRenderer(window, -1, sdl.RENDERER_SOFTWARE)
 	if err != nil {
 		panic(err)
 	}
-	surface.FillRect(nil, Black) // draw bg
 
-	for x, line := range board {
-		for y, _ := range line {
-			rect := sdl.Rect{
-				X: int32(x*CellSize) + 1,
-				Y: int32(y*CellSize) + 1,
-				W: CellSize - 2,
-				H: CellSize - 2,
-			}
-			surface.FillRect(&rect, White)
-		}
-	}
+	renderBg(renderer)
+	renderBoard(renderer, board)
+	renderer.Present()
 
-	window.UpdateSurface()
 	// ch := make(chan sudoku.Cell)
 	// solve(board, ch)
 
@@ -67,7 +59,6 @@ func main() {
 			case *sdl.QuitEvent:
 				println("Quit")
 				running = false
-				break
 			}
 		}
 	}
