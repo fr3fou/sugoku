@@ -6,4 +6,5 @@ require (
 	github.com/davecgh/go-spew v1.1.0
 	github.com/go-playground/assert/v2 v2.0.1
 	github.com/stretchr/testify v1.5.1
+	github.com/veandco/go-sdl2 v0.4.1
 )
