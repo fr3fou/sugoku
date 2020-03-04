@@ -22,6 +22,15 @@ func renderBg(r *sdl.Renderer) error {
 	})
 }
 
+func renderLine(r *sdl.Renderer, x, y, xx, yy int) error {
+	return r.DrawLine(
+		int32(x),
+		int32(y),
+		int32(xx),
+		int32(yy),
+	)
+}
+
 func renderBoard(r *sdl.Renderer, f *ttf.Font, board sudoku.Sudoku) error {
 	for x, line := range board {
 		for y, num := range line {
@@ -39,40 +48,40 @@ func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 		return err
 	}
 
-	if err := r.DrawLine(
-		int32(cell.X*CellSize),
-		int32(cell.Y*CellSize),
-		int32(cell.X*CellSize+CellSize),
-		int32(cell.Y*CellSize),
+	if err := renderLine(r,
+		cell.X*CellSize,
+		cell.Y*CellSize,
+		cell.X*CellSize+CellSize,
+		cell.Y*CellSize,
 	); err != nil {
 		return err
 	}
 
-	if err := r.DrawLine(
-		int32(cell.X*CellSize),
-		int32(cell.Y*CellSize),
-		int32(cell.X*CellSize),
-		int32(cell.Y*CellSize+CellSize),
+	if err := renderLine(r,
+		cell.X*CellSize,
+		cell.Y*CellSize,
+		cell.X*CellSize,
+		cell.Y*CellSize+CellSize,
 	); err != nil {
 		return err
 	}
 
 	// horizontal edge
 	if cell.Y%3 == 0 {
-		if err := r.DrawLine(
-			int32(cell.X*CellSize),
-			int32(cell.Y*CellSize+1),
-			int32(cell.X*CellSize+CellSize),
-			int32(cell.Y*CellSize+1),
+		if err := renderLine(r,
+			cell.X*CellSize,
+			cell.Y*CellSize+1,
+			cell.X*CellSize+CellSize,
+			cell.Y*CellSize+1,
 		); err != nil {
 			return err
 		}
 
-		if err := r.DrawLine(
-			int32(cell.X*CellSize),
-			int32(cell.Y*CellSize-1),
-			int32(cell.X*CellSize+CellSize),
-			int32(cell.Y*CellSize-1),
+		if err := renderLine(r,
+			cell.X*CellSize,
+			cell.Y*CellSize-1,
+			cell.X*CellSize+CellSize,
+			cell.Y*CellSize-1,
 		); err != nil {
 			return err
 		}
@@ -80,20 +89,60 @@ func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 
 	// vertical edge
 	if cell.X%3 == 0 {
-		if err := r.DrawLine(
-			int32(cell.X*CellSize+1),
-			int32(cell.Y*CellSize),
-			int32(cell.X*CellSize+1),
-			int32(cell.Y*CellSize+CellSize),
+		if err := renderLine(r,
+			cell.X*CellSize+1,
+			cell.Y*CellSize,
+			cell.X*CellSize+1,
+			cell.Y*CellSize+CellSize,
 		); err != nil {
 			return err
 		}
 
-		if err := r.DrawLine(
-			int32(cell.X*CellSize-1),
-			int32(cell.Y*CellSize),
-			int32(cell.X*CellSize-1),
-			int32(cell.Y*CellSize+CellSize),
+		if err := renderLine(r,
+			cell.X*CellSize-1,
+			cell.Y*CellSize,
+			cell.X*CellSize-1,
+			cell.Y*CellSize+CellSize,
+		); err != nil {
+			return err
+		}
+	}
+	// bottom line
+	if cell.Y == 8 {
+		if err := renderLine(r,
+			cell.X*CellSize,
+			(cell.Y+1)*CellSize-1,
+			cell.X*CellSize+CellSize,
+			(cell.Y+1)*CellSize-1,
+		); err != nil {
+			return err
+		}
+
+		if err := renderLine(r,
+			cell.X*CellSize,
+			(cell.Y+1)*CellSize-2,
+			cell.X*CellSize+CellSize,
+			(cell.Y+1)*CellSize-2,
+		); err != nil {
+			return err
+		}
+	}
+	// left line
+	if cell.X == 8 {
+		if err := renderLine(r,
+			(cell.X+1)*CellSize-1,
+			cell.Y*CellSize,
+			(cell.X+1)*CellSize-1,
+			cell.Y*CellSize+CellSize,
+		); err != nil {
+			return err
+		}
+
+		if err := renderLine(r,
+			(cell.X+1)*CellSize-2,
+			cell.Y*CellSize,
+			(cell.X+1)*CellSize-2,
+			cell.Y*CellSize+CellSize,
 		); err != nil {
 			return err
 		}
