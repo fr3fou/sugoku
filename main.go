@@ -51,7 +51,7 @@ func main() {
 		panic(err)
 	}
 
-	font, err := ttf.OpenFont("assets/fonts/inter.ttf", 80)
+	font, err := ttf.OpenFont("assets/fonts/roboto.ttf", 80)
 	if err != nil {
 		panic(err)
 	}
