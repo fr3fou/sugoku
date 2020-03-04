@@ -48,6 +48,50 @@ func renderCell(r *sdl.Renderer, cell *sudoku.Cell) error {
 		return err
 	}
 
+	// horizontal edge
+	if cell.Y%3 == 0 {
+		err = r.DrawLine(
+			int32(cell.X*CellSize),
+			int32(cell.Y*CellSize+1),
+			int32(cell.X*CellSize+CellSize),
+			int32(cell.Y*CellSize+1),
+		)
+		if err != nil {
+			return err
+		}
+		err = r.DrawLine(
+			int32(cell.X*CellSize),
+			int32(cell.Y*CellSize-1),
+			int32(cell.X*CellSize+CellSize),
+			int32(cell.Y*CellSize-1),
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	// vertical edge
+	if cell.X%3 == 0 {
+		err = r.DrawLine(
+			int32(cell.X*CellSize+1),
+			int32(cell.Y*CellSize),
+			int32(cell.X*CellSize+1),
+			int32(cell.Y*CellSize+CellSize),
+		)
+		if err != nil {
+			return err
+		}
+		err = r.DrawLine(
+			int32(cell.X*CellSize-1),
+			int32(cell.Y*CellSize),
+			int32(cell.X*CellSize-1),
+			int32(cell.Y*CellSize+CellSize),
+		)
+		if err != nil {
+			return err
+		}
+	}
+
 	err = r.DrawLine(
 		int32(cell.X*CellSize),
 		int32(cell.Y*CellSize),
