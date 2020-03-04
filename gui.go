@@ -22,12 +22,12 @@ func renderBg(r *sdl.Renderer) error {
 	})
 }
 
-func renderLine(r *sdl.Renderer, x, y, xx, yy int) error {
+func renderLine(r *sdl.Renderer, x0, y0, x1, y1 int) error {
 	return r.DrawLine(
-		int32(x),
-		int32(y),
-		int32(xx),
-		int32(yy),
+		int32(x0),
+		int32(y0),
+		int32(x1),
+		int32(y1),
 	)
 }
 
