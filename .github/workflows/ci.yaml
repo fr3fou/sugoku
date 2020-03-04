@@ -12,6 +12,8 @@ jobs:
       - name: Install golangci-lint
         run: |
           go get github.com/golangci/golangci-lint/cmd/golangci-lint
+      - name: "Install sdl"
+        run: "apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev"
       - name: Run linters
         run: |
           export PATH=$PATH:$(go env GOPATH)/bin   
@@ -24,5 +26,7 @@ jobs:
         with:
           go-version: 1.13.x
       - uses: actions/checkout@v1
+      - name: "Install sdl"
+        run: "apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev"
       - name: Run tests
         run: go test -v -covermode=atomic -race ./...
