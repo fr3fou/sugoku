@@ -103,7 +103,7 @@ func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 		return nil
 	}
 
-	s, err := f.RenderUTF8Solid(strconv.Itoa(cell.Num), sdl.Color{})
+	s, err := f.RenderUTF8Blended(strconv.Itoa(cell.Num), sdl.Color{})
 	if err != nil {
 		return err
 	}
