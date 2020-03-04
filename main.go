@@ -45,8 +45,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer renderer.Destroy()
 
-	_, err = ttf.OpenFont("assets/fonts/score.ttf", 50)
+	if err := ttf.Init(); err != nil {
+		panic(err)
+	}
+
+	font, err := ttf.OpenFont("assets/fonts/inter.ttf", 80)
 	if err != nil {
 		panic(err)
 	}
@@ -55,11 +60,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := renderBoard(renderer, board); err != nil {
-		panic(err)
-	}
-
-	if err := ttf.Init(); err != nil {
+	if err := renderBoard(renderer, font, board); err != nil {
 		panic(err)
 	}
 

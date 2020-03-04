@@ -1,8 +1,11 @@
 package main
 
 import (
+	"strconv"
+
 	"github.com/fr3fou/sudogo/sudoku"
 	"github.com/veandco/go-sdl2/sdl"
+	"github.com/veandco/go-sdl2/ttf"
 )
 
 func renderBg(r *sdl.Renderer) error {
@@ -19,10 +22,10 @@ func renderBg(r *sdl.Renderer) error {
 	})
 }
 
-func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
+func renderBoard(r *sdl.Renderer, f *ttf.Font, board sudoku.Sudoku) error {
 	for x, line := range board {
-		for y := range line {
-			if err := renderCell(r, &sudoku.Cell{Num: 0, X: x, Y: y}); err != nil {
+		for y, num := range line {
+			if err := renderCell(r, f, &sudoku.Cell{Num: num, X: x, Y: y}); err != nil {
 				return err
 			}
 		}
@@ -31,7 +34,7 @@ func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
 	return nil
 }
 
-func renderCell(r *sdl.Renderer, cell *sudoku.Cell) error {
+func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 	if err := r.SetDrawColor(0, 0, 0, 0); err != nil {
 		return err
 	}
@@ -95,6 +98,29 @@ func renderCell(r *sdl.Renderer, cell *sudoku.Cell) error {
 			return err
 		}
 	}
+
+	if cell.Num == 0 {
+		return nil
+	}
+
+	s, err := f.RenderUTF8Solid(strconv.Itoa(cell.Num), sdl.Color{})
+	if err != nil {
+		return err
+	}
+	defer s.Free()
+
+	clip := &sdl.Rect{}
+	s.GetClipRect(clip)
+	t, err := r.CreateTextureFromSurface(s)
+	if err != nil {
+		return err
+	}
+	r.Copy(t, nil, &sdl.Rect{
+		X: int32(cell.X*CellSize) + 20,
+		Y: int32(cell.Y * CellSize),
+		W: clip.W,
+		H: clip.H,
+	})
 
 	return nil
 }
