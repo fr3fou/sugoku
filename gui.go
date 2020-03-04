@@ -116,10 +116,10 @@ func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 		return err
 	}
 	r.Copy(t, nil, &sdl.Rect{
-		X: int32(cell.X*CellSize) + 25,
-		Y: int32(cell.Y * CellSize),
+		X: int32(cell.X*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
+		Y: int32(cell.Y*CellSize) + (CellSize-clip.H)/2, // center vertically (relies on clip height being accurate)
 		W: clip.W,
-		H: clip.H,
+		H: clip.H, // apparently 94px
 	})
 
 	return nil
