@@ -5,27 +5,24 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-func renderBg(r *sdl.Renderer) {
+func renderBg(r *sdl.Renderer) error {
 	err := r.SetDrawColor(0, 0, 0, 0)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	err = r.FillRect(&sdl.Rect{
+	return r.FillRect(&sdl.Rect{
 		X: 0,
 		Y: 0,
 		W: Width,
 		H: Height,
 	})
-	if err != nil {
-		panic(err)
-	}
 }
 
-func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) {
+func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
 	err := r.SetDrawColor(255, 255, 255, 255)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	for x, line := range board {
@@ -38,8 +35,10 @@ func renderBoard(r *sdl.Renderer, board sudoku.Sudoku) {
 			}
 			err = r.FillRect(&rect)
 			if err != nil {
-				panic(err)
+				return nil
 			}
 		}
 	}
+
+	return nil
 }

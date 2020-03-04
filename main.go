@@ -45,8 +45,14 @@ func main() {
 		panic(err)
 	}
 
-	renderBg(renderer)
-	renderBoard(renderer, board)
+	err = renderBg(renderer)
+	if err != nil {
+		panic(err)
+	}
+	err = renderBoard(renderer, board)
+	if err != nil {
+		panic(err)
+	}
 	renderer.Present()
 
 	// ch := make(chan sudoku.Cell)
