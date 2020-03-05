@@ -56,11 +56,11 @@ func main() {
 		panic(err)
 	}
 
-	if err := renderBg(renderer); err != nil {
+	if err := RenderBG(renderer); err != nil {
 		panic(err)
 	}
 
-	if err := renderBoard(renderer, font, board); err != nil {
+	if err := RenderBoard(renderer, board); err != nil {
 		panic(err)
 	}
 

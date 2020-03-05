@@ -8,7 +8,8 @@ import (
 	"github.com/veandco/go-sdl2/ttf"
 )
 
-func renderBg(r *sdl.Renderer) error {
+// RenderBG renders the background
+func RenderBG(r *sdl.Renderer) error {
 	err := r.SetDrawColor(255, 255, 255, 255)
 	if err != nil {
 		return err
@@ -22,7 +23,8 @@ func renderBg(r *sdl.Renderer) error {
 	})
 }
 
-func renderLine(r *sdl.Renderer, x0, y0, x1, y1 int) error {
+// RenderLine renders a line
+func RenderLine(r *sdl.Renderer, x0, y0, x1, y1 int) error {
 	return r.DrawLine(
 		int32(x0),
 		int32(y0),
@@ -31,10 +33,11 @@ func renderLine(r *sdl.Renderer, x0, y0, x1, y1 int) error {
 	)
 }
 
-func renderBoard(r *sdl.Renderer, f *ttf.Font, board sudoku.Sudoku) error {
+// RenderBoard renders only the grid
+func RenderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
 	for x, line := range board {
-		for y, num := range line {
-			if err := renderCell(r, f, &sudoku.Cell{Num: num, X: x, Y: y}); err != nil {
+		for y, _ := range line {
+			if err := RenderCell(r, x, y); err != nil {
 				return err
 			}
 		}
@@ -43,115 +46,118 @@ func renderBoard(r *sdl.Renderer, f *ttf.Font, board sudoku.Sudoku) error {
 	return nil
 }
 
-func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
+// RenderCell renders a single square
+func RenderCell(r *sdl.Renderer, x, y int) error {
 	if err := r.SetDrawColor(0, 0, 0, 0); err != nil {
 		return err
 	}
 
-	if err := renderLine(r,
-		cell.X*CellSize,
-		cell.Y*CellSize,
-		cell.X*CellSize+CellSize,
-		cell.Y*CellSize,
+	if err := RenderLine(r,
+		x*CellSize,
+		y*CellSize,
+		x*CellSize+CellSize,
+		y*CellSize,
 	); err != nil {
 		return err
 	}
 
-	if err := renderLine(r,
-		cell.X*CellSize,
-		cell.Y*CellSize,
-		cell.X*CellSize,
-		cell.Y*CellSize+CellSize,
+	if err := RenderLine(r,
+		x*CellSize,
+		y*CellSize,
+		x*CellSize,
+		y*CellSize+CellSize,
 	); err != nil {
 		return err
 	}
 
 	// horizontal edge
-	if cell.Y%3 == 0 {
-		if err := renderLine(r,
-			cell.X*CellSize,
-			cell.Y*CellSize+1,
-			cell.X*CellSize+CellSize,
-			cell.Y*CellSize+1,
+	if y%3 == 0 {
+		if err := RenderLine(r,
+			x*CellSize,
+			y*CellSize+1,
+			x*CellSize+CellSize,
+			y*CellSize+1,
 		); err != nil {
 			return err
 		}
 
-		if err := renderLine(r,
-			cell.X*CellSize,
-			cell.Y*CellSize-1,
-			cell.X*CellSize+CellSize,
-			cell.Y*CellSize-1,
+		if err := RenderLine(r,
+			x*CellSize,
+			y*CellSize-1,
+			x*CellSize+CellSize,
+			y*CellSize-1,
 		); err != nil {
 			return err
 		}
 	}
 
 	// vertical edge
-	if cell.X%3 == 0 {
-		if err := renderLine(r,
-			cell.X*CellSize+1,
-			cell.Y*CellSize,
-			cell.X*CellSize+1,
-			cell.Y*CellSize+CellSize,
+	if x%3 == 0 {
+		if err := RenderLine(r,
+			x*CellSize+1,
+			y*CellSize,
+			x*CellSize+1,
+			y*CellSize+CellSize,
 		); err != nil {
 			return err
 		}
 
-		if err := renderLine(r,
-			cell.X*CellSize-1,
-			cell.Y*CellSize,
-			cell.X*CellSize-1,
-			cell.Y*CellSize+CellSize,
+		if err := RenderLine(r,
+			x*CellSize-1,
+			y*CellSize,
+			x*CellSize-1,
+			y*CellSize+CellSize,
 		); err != nil {
 			return err
 		}
 	}
+
 	// bottom line
-	if cell.Y == 8 {
-		if err := renderLine(r,
-			cell.X*CellSize,
-			(cell.Y+1)*CellSize-1,
-			cell.X*CellSize+CellSize,
-			(cell.Y+1)*CellSize-1,
+	if y == 8 {
+		if err := RenderLine(r,
+			x*CellSize,
+			(y+1)*CellSize-1,
+			x*CellSize+CellSize,
+			(y+1)*CellSize-1,
 		); err != nil {
 			return err
 		}
 
-		if err := renderLine(r,
-			cell.X*CellSize,
-			(cell.Y+1)*CellSize-2,
-			cell.X*CellSize+CellSize,
-			(cell.Y+1)*CellSize-2,
+		if err := RenderLine(r,
+			x*CellSize,
+			(y+1)*CellSize-2,
+			x*CellSize+CellSize,
+			(y+1)*CellSize-2,
 		); err != nil {
 			return err
 		}
 	}
+
 	// left line
-	if cell.X == 8 {
-		if err := renderLine(r,
-			(cell.X+1)*CellSize-1,
-			cell.Y*CellSize,
-			(cell.X+1)*CellSize-1,
-			cell.Y*CellSize+CellSize,
+	if x == 8 {
+		if err := RenderLine(r,
+			(x+1)*CellSize-1,
+			y*CellSize,
+			(x+1)*CellSize-1,
+			y*CellSize+CellSize,
 		); err != nil {
 			return err
 		}
 
-		if err := renderLine(r,
-			(cell.X+1)*CellSize-2,
-			cell.Y*CellSize,
-			(cell.X+1)*CellSize-2,
-			cell.Y*CellSize+CellSize,
+		if err := RenderLine(r,
+			(x+1)*CellSize-2,
+			y*CellSize,
+			(x+1)*CellSize-2,
+			y*CellSize+CellSize,
 		); err != nil {
 			return err
 		}
 	}
 
-	if cell.Num == 0 {
-		return nil
-	}
+	return nil
+}
 
+func renderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 	s, err := f.RenderUTF8Blended(strconv.Itoa(cell.Num), sdl.Color{})
 	if err != nil {
 		return err
@@ -160,16 +166,16 @@ func renderCell(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 
 	clip := &sdl.Rect{}
 	s.GetClipRect(clip)
+
 	t, err := r.CreateTextureFromSurface(s)
 	if err != nil {
 		return err
 	}
-	r.Copy(t, nil, &sdl.Rect{
+
+	return r.Copy(t, nil, &sdl.Rect{
 		X: int32(cell.X*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
 		Y: int32(cell.Y*CellSize) + (CellSize-clip.H)/2, // center vertically (relies on clip height being accurate)
 		W: clip.W,
 		H: clip.H, // apparently 94px
 	})
-
-	return nil
 }
