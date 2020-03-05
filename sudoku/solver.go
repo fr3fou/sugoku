@@ -7,7 +7,9 @@ type Solver struct {
 
 func (s *Solver) Write(x, y, num int) {
 	s.Board[x][y] = num
-	s.snapshot()
+	if s.Snapshots != nil {
+		s.snapshot()
+	}
 }
 
 func (s *Solver) snapshot() {
@@ -61,7 +63,10 @@ func (s *Solver) solve(x, y int) *Sudoku {
 	// base case (bottom right corner)
 	if x == 8 && y == 8 && len(nums) == 1 {
 		s.Write(x, y, nums[0]) // write the last num
-		close(s.Snapshots)
+		if s.Snapshots != nil {
+			close(s.Snapshots)
+		}
+
 		return s.Board // success!
 	}
 
