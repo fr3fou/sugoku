@@ -34,10 +34,13 @@ func RenderLine(r *sdl.Renderer, x0, y0, x1, y1 int) error {
 }
 
 // RenderBoard renders only the grid
-func RenderBoard(r *sdl.Renderer, board sudoku.Sudoku) error {
+func RenderBoard(r *sdl.Renderer, font *ttf.Font, board sudoku.Sudoku) error {
 	for x, line := range board {
-		for y, _ := range line {
+		for y, num := range line {
 			if err := RenderCell(r, x, y); err != nil {
+				return err
+			}
+			if err := RenderNum(r, font, &sudoku.Cell{x, y, num}); err != nil {
 				return err
 			}
 		}
@@ -160,6 +163,10 @@ func RenderCell(r *sdl.Renderer, x, y int) error {
 func RenderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 	if cell.Num == 0 {
 		return nil
+	}
+
+	if err := r.SetDrawColor(0, 0, 0, 0); err != nil {
+		return err
 	}
 
 	s, err := f.RenderUTF8Blended(strconv.Itoa(cell.Num), sdl.Color{})

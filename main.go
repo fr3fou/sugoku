@@ -57,7 +57,7 @@ func main() {
 	}
 
 	ch := make(chan sudoku.Cell)
-	solve(board, ch)
+	go solve(board, ch)
 
 	running := true
 	for running {
@@ -75,14 +75,12 @@ func main() {
 			panic(err)
 		}
 
-		if err := RenderBoard(renderer, board); err != nil {
+		if err := RenderBoard(renderer, font, board); err != nil {
 			panic(err)
 		}
 
 		for cell := range ch {
-			if err := RenderNum(renderer, font, &cell); err != nil {
-				panic(err)
-			}
+			board[cell.X][cell.Y] = cell.Num
 		}
 
 		renderer.Present()
