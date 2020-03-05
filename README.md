@@ -4,7 +4,7 @@ Simple sudoku solver using backtracking w/ a neat GUI to better display the algo
 
 ## How to start
 
-```console
+```sh
 $: go run cmd/gui/main.go # click anywhere on the screen to start the solving
 $: go run cmd/cli/main.go
 ```
