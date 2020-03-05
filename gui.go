@@ -183,6 +183,7 @@ func RenderNum(r *sdl.Renderer, f *ttf.Font, x, y, num int) error {
 	if err != nil {
 		return err
 	}
+	defer t.Destroy()
 
 	return r.Copy(t, nil, &sdl.Rect{
 		X: int32(x*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
