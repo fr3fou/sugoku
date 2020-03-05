@@ -194,8 +194,8 @@ func RenderNum(r *sdl.Renderer, f *ttf.Font, x, y, num int) error {
 	defer t.Destroy()
 
 	return r.Copy(t, nil, &sdl.Rect{
-		X: int32(x*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
-		Y: int32(y*CellSize) + (CellSize-clip.H)/2, // center vertically (relies on clip height being accurate)
+		X: int32(y*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
+		Y: int32(x*CellSize) + (CellSize-clip.H)/2, // center vertically (relies on clip height being accurate)
 		W: clip.W,
 		H: clip.H, // apparently 94px
 	})
