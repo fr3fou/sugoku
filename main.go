@@ -56,19 +56,8 @@ func main() {
 		panic(err)
 	}
 
-	if err := RenderBG(renderer); err != nil {
-		panic(err)
-	}
-
-	if err := RenderBoard(renderer, board); err != nil {
-		panic(err)
-	}
-
-	// ch := make(chan sudoku.Cell)
-	// solve(board, ch)
-
-	// render
-	renderer.Present()
+	ch := make(chan sudoku.Cell)
+	solve(board, ch)
 
 	running := true
 	for running {
@@ -79,11 +68,35 @@ func main() {
 				running = false
 			}
 		}
-	}
 
+		renderer.Clear()
+
+		if err := RenderBG(renderer); err != nil {
+			panic(err)
+		}
+
+		if err := RenderBoard(renderer, board); err != nil {
+			panic(err)
+		}
+
+		for cell := range ch {
+			if err := RenderNum(renderer, font, &cell); err != nil {
+				panic(err)
+			}
+		}
+
+		renderer.Present()
+	}
 }
 
 func solve(board sudoku.Sudoku, ch chan sudoku.Cell) {
+	// send the original values
+	for x, line := range board {
+		for y, num := range line {
+			ch <- sudoku.Cell{x, y, num}
+		}
+	}
+
 	solver := sudoku.Solver{
 		Board: &board,
 		Cells: ch,
