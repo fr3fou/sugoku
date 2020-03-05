@@ -61,7 +61,7 @@ func main() {
 			case *sdl.QuitEvent:
 				running = false
 			case *sdl.MouseButtonEvent:
-				if e.State == sdl.PRESSED || !solving {
+				if e.State == sdl.PRESSED && !solving {
 					solving = true
 					go solve(board, ch)
 				}

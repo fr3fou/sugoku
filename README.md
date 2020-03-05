@@ -2,6 +2,12 @@
 
 Simple sudoku solver using backtracking w/ a neat GUI to better display the algorithm's inner-workings.
 
+## How to start
+
+```console
+$ go run cmd/gui/main.go #$
+```
+
 ## TODO
 
 - [x] Don't force concurrency
