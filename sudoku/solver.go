@@ -1,9 +1,15 @@
 package sudoku
 
+import "errors"
+
 type Solver struct {
 	Board     *Sudoku
 	Snapshots chan Sudoku
 }
+
+var (
+	ErrUnsolvableSudoku = errors.New("sudoku: sudoku is unsolvable")
+)
 
 func (s *Solver) Write(x, y, num int) {
 	s.Board[x][y] = num
@@ -53,8 +59,14 @@ func (s *Solver) ValidNums(x, y int) []int {
 }
 
 // Solve solves the sudoku
-func (s *Solver) Solve() Sudoku {
-	return *s.solve(0, 0)
+func (s *Solver) Solve() (Sudoku, error) {
+	n := s.solve(0, 0)
+
+	if n == nil {
+		return Sudoku{}, ErrUnsolvableSudoku
+	}
+
+	return *n, nil
 }
 
 func (s *Solver) solve(x, y int) *Sudoku {
@@ -73,7 +85,18 @@ func (s *Solver) solve(x, y int) *Sudoku {
 	for _, num := range nums {
 		s.Write(x, y, num) // assume it's the correct one
 
-		n := s.solve(s.next(x, y)) // recur
+		i, j := s.next(x, y)
+
+		// no free cells available
+		if i == -1 && j == -1 {
+			if s.Snapshots != nil {
+				close(s.Snapshots)
+			}
+
+			return s.Board
+		}
+
+		n := s.solve(i, j) // recur
 		if n != nil {
 			return n // return if not nil (has reached the base case)
 		}
@@ -85,14 +108,15 @@ func (s *Solver) solve(x, y int) *Sudoku {
 }
 
 // next finds the next number that is available
+// returns -1, -1 if there are no free nums left
 func (s *Solver) next(x, y int) (int, int) {
-	for s.Board[x][y] != 0 {
-		x++
-		if x > 8 { // if we have reached the end of the row
-			y++ // go to the next row
-			x = 0
+	for x, line := range s.Board {
+		for y := range line {
+			if s.Board[x][y] == 0 {
+				return x, y
+			}
 		}
 	}
 
-	return x, y
+	return -1, -1
 }
