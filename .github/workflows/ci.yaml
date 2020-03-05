@@ -1,24 +1,6 @@
-name: Test and Lint
+name: Test
 on: [push, pull_request]
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Go
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.13.x
-      - uses: actions/checkout@v1
-      - name: "Install sdl"
-        run: "sudo apt install libsdl2{,-image,-mixer,-ttf,-gfx}-dev"
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.8
-      - name: Run linters
-        run: |
-          ls
-          export PATH=$PATH:$(go env GOPATH)/bin   
-          golangci-lint -E bodyclose,misspell,gocyclo,gofmt,golint,unconvert,goimports,depguard,gocritic,interfacer run ./...
   test:
     runs-on: ubuntu-latest
     steps:
