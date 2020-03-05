@@ -16,7 +16,7 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.23.8
       - name: Run linters
         run: |
-          pwd
+          ls
           export PATH=$PATH:$(go env GOPATH)/bin   
           golangci-lint -E bodyclose,misspell,gocyclo,gofmt,golint,unconvert,goimports,depguard,gocritic,interfacer run ./...
   test:
