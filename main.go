@@ -77,8 +77,12 @@ func main() {
 			panic(err)
 		}
 
-		if err := RenderBoard(renderer, font, <-ch); err != nil {
-			panic(err)
+		var ok bool
+		board, ok = <-ch
+		if ok {
+			if err := RenderBoard(renderer, font, board); err != nil {
+				panic(err)
+			}
 		}
 
 		renderer.Present()
@@ -88,7 +92,8 @@ func main() {
 func solve(board sudoku.Sudoku, ch chan sudoku.Sudoku) {
 	ch <- board
 	solver := sudoku.Solver{
-		Board: &board,
+		Board:     &board,
+		Snapshots: ch,
 	}
 
 	go solver.Solve()
