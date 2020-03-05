@@ -1,17 +1,10 @@
 package main
 
 import (
+	"github.com/fr3fou/sugoku/gui"
 	"github.com/fr3fou/sugoku/sudoku"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-)
-
-const (
-	CellSize = 100
-	White    = 0xFFFFFF
-	Black    = 0x000000
-	Width    = 900
-	Height   = 900
 )
 
 func main() {
@@ -21,7 +14,7 @@ func main() {
 	defer sdl.Quit()
 
 	window, err := sdl.CreateWindow("Sudoku", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		Width, Height, sdl.WINDOW_SHOWN)
+		gui.Width, gui.Height, sdl.WINDOW_SHOWN)
 	if err != nil {
 		panic(err)
 	}
@@ -59,30 +52,36 @@ func main() {
 	defer font.Close()
 
 	ch := make(chan sudoku.Sudoku)
-	go solve(board, ch)
 
+	solving := false
 	running := true
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
-			switch event.(type) {
+			switch e := event.(type) {
 			case *sdl.QuitEvent:
-				println("Quit")
 				running = false
+			case *sdl.MouseButtonEvent:
+				if e.State == sdl.PRESSED || !solving {
+					solving = true
+					go solve(board, ch)
+				}
 			}
 		}
 
 		renderer.Clear()
 
-		if err := RenderBG(renderer); err != nil {
+		if err := gui.RenderBG(renderer); err != nil {
 			panic(err)
 		}
 
-		newBoard, ok := <-ch
-		if ok {
-			board = newBoard
+		if solving {
+			newBoard, ok := <-ch
+			if ok {
+				board = newBoard
+			}
 		}
 
-		if err := RenderBoard(renderer, font, board); err != nil {
+		if err := gui.RenderBoard(renderer, font, board); err != nil {
 			panic(err)
 		}
 

@@ -1,4 +1,4 @@
-package main
+package gui
 
 import (
 	"strconv"
@@ -6,6 +6,14 @@ import (
 	"github.com/fr3fou/sugoku/sudoku"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
+)
+
+const (
+	CellSize = 100
+	White    = 0xFFFFFF
+	Black    = 0x000000
+	Width    = 900
+	Height   = 900
 )
 
 // RenderBG renders the background
