@@ -1,13 +1,17 @@
 package sudoku
 
 type Solver struct {
-	Board *Sudoku
-	Cells Cells
+	Board     *Sudoku
+	Snapshots chan Sudoku
 }
 
 func (s *Solver) Write(x, y, num int) {
 	s.Board[x][y] = num
-	s.Cells <- Cell{x, y, num}
+	s.snapshot()
+}
+
+func (s *Solver) snapshot() {
+	s.Snapshots <- *s.Board
 }
 
 // ValidNums returns the valid nums
@@ -57,7 +61,7 @@ func (s *Solver) solve(x, y int) *Sudoku {
 	// base case (bottom right corner)
 	if x == 8 && y == 8 && len(nums) == 1 {
 		s.Write(x, y, nums[0]) // write the last num
-		close(s.Cells)
+		close(s.Snapshots)
 		return s.Board // success!
 	}
 

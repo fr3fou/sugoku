@@ -3,7 +3,7 @@ package main
 import (
 	"strconv"
 
-	"github.com/fr3fou/sudogo/sudoku"
+	"github.com/fr3fou/sugoku/sudoku"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -40,7 +40,7 @@ func RenderBoard(r *sdl.Renderer, font *ttf.Font, board sudoku.Sudoku) error {
 			if err := RenderCell(r, x, y); err != nil {
 				return err
 			}
-			if err := RenderNum(r, font, &sudoku.Cell{x, y, num}); err != nil {
+			if err := RenderNum(r, font, x, y, num); err != nil {
 				return err
 			}
 		}
@@ -160,8 +160,9 @@ func RenderCell(r *sdl.Renderer, x, y int) error {
 	return nil
 }
 
-func RenderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
-	if cell.Num == 0 {
+// RenderNum renders only a number
+func RenderNum(r *sdl.Renderer, f *ttf.Font, x, y, num int) error {
+	if num == 0 {
 		return nil
 	}
 
@@ -169,7 +170,7 @@ func RenderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 		return err
 	}
 
-	s, err := f.RenderUTF8Blended(strconv.Itoa(cell.Num), sdl.Color{})
+	s, err := f.RenderUTF8Blended(strconv.Itoa(num), sdl.Color{})
 	if err != nil {
 		return err
 	}
@@ -184,8 +185,8 @@ func RenderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 	}
 
 	return r.Copy(t, nil, &sdl.Rect{
-		X: int32(cell.X*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
-		Y: int32(cell.Y*CellSize) + (CellSize-clip.H)/2, // center vertically (relies on clip height being accurate)
+		X: int32(x*CellSize) + (CellSize-clip.W)/2, // center horizontally (relies on clip width being accurate)
+		Y: int32(y*CellSize) + (CellSize-clip.H)/2, // center vertically (relies on clip height being accurate)
 		W: clip.W,
 		H: clip.H, // apparently 94px
 	})
