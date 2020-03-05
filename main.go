@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/fr3fou/sudogo/sudoku"
+	"github.com/fr3fou/sugoku/sudoku"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -50,13 +50,15 @@ func main() {
 	if err := ttf.Init(); err != nil {
 		panic(err)
 	}
+	defer ttf.Quit()
 
 	font, err := ttf.OpenFont("assets/fonts/roboto.ttf", 80)
 	if err != nil {
 		panic(err)
 	}
+	defer font.Close()
 
-	ch := make(chan sudoku.Cell)
+	ch := make(chan sudoku.Sudoku)
 	go solve(board, ch)
 
 	running := true
@@ -75,29 +77,18 @@ func main() {
 			panic(err)
 		}
 
-		if err := RenderBoard(renderer, font, board); err != nil {
+		if err := RenderBoard(renderer, font, <-ch); err != nil {
 			panic(err)
-		}
-
-		for cell := range ch {
-			board[cell.X][cell.Y] = cell.Num
 		}
 
 		renderer.Present()
 	}
 }
 
-func solve(board sudoku.Sudoku, ch chan sudoku.Cell) {
-	// send the original values
-	for x, line := range board {
-		for y, num := range line {
-			ch <- sudoku.Cell{x, y, num}
-		}
-	}
-
+func solve(board sudoku.Sudoku, ch chan sudoku.Sudoku) {
+	ch <- board
 	solver := sudoku.Solver{
 		Board: &board,
-		Cells: ch,
 	}
 
 	go solver.Solve()
