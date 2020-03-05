@@ -77,12 +77,13 @@ func main() {
 			panic(err)
 		}
 
-		var ok bool
-		board, ok = <-ch
+		newBoard, ok := <-ch
 		if ok {
-			if err := RenderBoard(renderer, font, board); err != nil {
-				panic(err)
-			}
+			board = newBoard
+		}
+
+		if err := RenderBoard(renderer, font, board); err != nil {
+			panic(err)
 		}
 
 		renderer.Present()

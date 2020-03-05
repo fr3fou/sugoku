@@ -82,10 +82,10 @@ func (s *Solver) solve(x, y int) *Sudoku {
 // next finds the next number that is available
 func (s *Solver) next(x, y int) (int, int) {
 	for s.Board[x][y] != 0 {
-		y++
-		if y > 8 { // if we have reached the end of the row
-			y = 0 // go to the next row
-			x++
+		x++
+		if x > 8 { // if we have reached the end of the row
+			y++ // go to the next row
+			x = 0
 		}
 	}
 
