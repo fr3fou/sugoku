@@ -157,7 +157,7 @@ func RenderCell(r *sdl.Renderer, x, y int) error {
 	return nil
 }
 
-func renderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
+func RenderNum(r *sdl.Renderer, f *ttf.Font, cell *sudoku.Cell) error {
 	s, err := f.RenderUTF8Blended(strconv.Itoa(cell.Num), sdl.Color{})
 	if err != nil {
 		return err
