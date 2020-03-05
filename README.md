@@ -2,6 +2,8 @@
 
 Simple sudoku solver using backtracking w/ a neat GUI to better display the algorithm's inner-workings.
 
+![gif](gif.gif)
+
 ## How to start
 
 ```sh
