@@ -2,6 +2,8 @@
 
 Simple sudoku solver using backtracking w/ a neat GUI to better display the algorithm's inner-workings.
 
+*Note: the time `sugoku` takes to solve a board with the GUI is significantly slower than without one, due to the capped framerate and blocking channels*
+
 ![gif](gif.gif)
 
 ## How to start
